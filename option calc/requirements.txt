@@ -1,0 +1,9 @@
+matplotlib.pyplot
+numpy
+pandas
+scipy.stats 
+utils.basic_multi
+utils.basic_single
+seaborn 
+yfinance
+warnings

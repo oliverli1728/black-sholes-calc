@@ -17,7 +17,7 @@ from backtesting import Backtest, Strategy
 
 # 2y swaps, relative yield curve steepness or CDS, local equity performance, global equity performance, commodity prices
 
-def steer_ols(swaps="", FX="", local_equity="", yc="", global_eq="", cb="", days=390, weights=[1], G10=False, US=False):
+def steer_ols(swaps="", FX="", local_equity="", yc="", global_eq="", cb="", days=376, weights=[1], G10=False, US=False):
     dates = [(dt.date.today()+dt.timedelta(days=-days)).strftime("%Y%m%d"), dt.date.today().strftime("%Y%m%d")]
     swaps_temp = Bloomberg(swaps).fetch_timeseries_data(["px last"], dates, col_names = swaps, reshape=True, dropna=False, resample=False).ffill()
     fx = Bloomberg([FX]).fetch_timeseries_data(["px last"], dates, col_names = FX, reshape=True, dropna=False, resample=False).ffill()

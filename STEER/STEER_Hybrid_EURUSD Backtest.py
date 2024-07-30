@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet
 from matplotlib.offsetbox import AnchoredText
-from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler, MinMaxScaler
 from sklearn.decomposition import PCA
 import statsmodels.tsa.stattools as ts 
 import backtrader as bt
@@ -83,7 +83,7 @@ def steer_ols(swaps="", FX="", local_equity="", yc="", global_eq="", cb="", days
     # Preprocessing
 
     poly = PolynomialFeatures(degree=1, include_bias=True)
-    scaler = StandardScaler()
+    scaler = MinMaxScaler()
 
     X = poly.fit_transform(X)
     X = scaler.fit_transform(X)
@@ -91,7 +91,7 @@ def steer_ols(swaps="", FX="", local_equity="", yc="", global_eq="", cb="", days
 
     # LinReg
 
-    model = LinearRegression(fit_intercept=True)
+    model = Lasso(fit_intercept=True)
     model.fit(X, fx)
     y_pred = model.predict(X)
     y_pred = pd.DataFrame(y_pred, index=X.index)
