@@ -6,4 +6,3 @@ scipy
 utils
 seaborn 
 yfinance
-warnings
