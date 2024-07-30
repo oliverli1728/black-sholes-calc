@@ -6,3 +6,4 @@ scipy
 utils
 seaborn 
 yfinance
+streamlit-elements
