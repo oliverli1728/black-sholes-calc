@@ -1,10 +1,9 @@
 streamlit
-matplotlib.pyplot
+matplotlib
 numpy
 pandas
-scipy.stats 
-utils.basic_multi
-utils.basic_single
+scipy
+utils
 seaborn 
 yfinance
 warnings
