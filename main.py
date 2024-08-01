@@ -8,7 +8,7 @@ from utils.basic_multi import multi_plotter
 from utils.basic_single import single_plotter
 import seaborn as sns
 
-# try:
+
 with st.sidebar:
     st.write("### Input Parameters")
     fx = st.checkbox("FX")
@@ -92,22 +92,18 @@ def plot_option(options, strike, spot, spot_range):
         options = options[0]
         if fx:
             notionals=[notional]
-            call_price, put_price = get_prices(     st.session_state["vol"],
-                                                st.session_state["strike"],
-                                                st.session_state["spot"],
-                                                st.session_state["rf"],
-                                                st.session_state["dividends"],
-                                                st.session_state["time"],
-                                              )
+    
         else:
             notionals=[1]
-            call_price, put_price = get_prices(     st.session_state["vol"],
+        
+        call_price, put_price = get_prices(     st.session_state["vol"],
                                                 st.session_state["strike"],
                                                 st.session_state["spot"],
                                                 st.session_state["rf"],
                                                 st.session_state["dividends"],
                                                 st.session_state["time"],
-                                               )
+                                                )
+
         if "Put" in options:
             if "Long" in options:
                     st.pyplot(single_plotter(spot=spot, strike=strike, op_type='p', tr_type='b', op_pr=call_price, spot_range=spot_range))
@@ -199,39 +195,29 @@ def plot_greeks(options, multi=True):
             rhos = []
             for time in ts:
                 if multi:
-                    if fx:
-                        temp = greeks(options[i], st.session_state[f"{options[i]}{i} + vol"],
-                                                    st.session_state[f"{options[i]}{i} + strike"],
-                                                    st.session_state[f"{options[i]}{i} + spot"],
-                                                    st.session_state[f"{options[i]}{i} + rf"],
-                                                    st.session_state[f"{options[i]}{i} + dividends"],
-                                                    time,
-                                                    st.session_state[f"{options[i]}{i} + notional"] / 10)
+                    if fx: 
+                        weight = st.session_state[f"{options[i]}{i} + notional"] / 10
                     else:
-                        temp = greeks(options[i], st.session_state[f"{options[i]}{i} + vol"],
+                        weight = st.session_state[f"{options[i]}{i} + pos"] 
+                    temp = greeks(options[i], st.session_state[f"{options[i]}{i} + vol"],
                                                     st.session_state[f"{options[i]}{i} + strike"],
                                                     st.session_state[f"{options[i]}{i} + spot"],
                                                     st.session_state[f"{options[i]}{i} + rf"],
                                                     st.session_state[f"{options[i]}{i} + dividends"],
                                                     time,
-                                                    st.session_state[f"{options[i]}{i} + pos"])
+                                                    weight)
                 else:
-                    if fx:
-                        temp = greeks(options[i], st.session_state["vol"],
-                                                    st.session_state["strike"],
-                                                    st.session_state["spot"],
-                                                    st.session_state["rf"],
-                                                    st.session_state["dividends"],
-                                                    time,
-                                                    st.session_state["notional"])
+                    if fx: 
+                        weight = st.session_state["notional"] / 10
                     else:
-                         temp = greeks(options[i], st.session_state["vol"],
+                        weight = st.session_state["pos"] 
+                    temp = greeks(options[i], st.session_state["vol"],
                                                     st.session_state["strike"],
                                                     st.session_state["spot"],
                                                     st.session_state["rf"],
                                                     st.session_state["dividends"],
                                                     time,
-                                                    st.session_state["pos"])
+                                                    weight)
                 deltas.append(temp[0])
                 gammas.append(temp[1])
                 vegas.append(temp[2])
@@ -328,7 +314,7 @@ if option != "Multi-Select":
                                                 st.session_state["rf"],
                                                 st.session_state["dividends"],
                                                 st.session_state["time"],
-                                                st.session_state[f"{options[i]}{i} + notional"])
+                                                )
                 
                 df_puts.loc[vol, spot] = put_price 
                 df_calls.loc[vol, spot] = call_price
@@ -412,7 +398,6 @@ else:
         pg = st.checkbox("Plot Greeks")
         if pg:
             plot_greeks(options)
-        heatmap = st.checkbox("Heatmap")
 
 
 # except:
